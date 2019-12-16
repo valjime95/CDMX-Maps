@@ -47,8 +47,8 @@ print(len(estaciones_list)) #hay 164 estaciones DISTINTAS
 n1 = estaciones_list[ran.randint(0,163)]   #origen    nodos aleatorios
 n2 = estaciones_list[ran.randint(0,163)]   #destino
 
-# n1 = (-99.142524, 19.3441988)
-# n2 = (-99.1878051, 19.3761645)
+# n1 = (-99.142524, 19.3441988) #universidad
+# n2 = (-99.1878051, 19.3761645) #mixcoac
 
 path = nx.shortest_path(estaciones,n1,n2)
 djs_path = nx.dijkstra_path(estaciones,n1,n2)
