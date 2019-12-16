@@ -12,6 +12,9 @@ import matplotlib.pyplot as plt
 import geopandas as gpd
 import zipfile
 import random as ran
+import ast 
+import json
+import lineas
 
 #arcpy.Merge_management(["rutas-lineas-de-metro/lineas-de-metro.shp", "rutas-metro/estaciones-metro.shp"], "merge.shp")
 
@@ -19,26 +22,33 @@ import random as ran
 
 # os.chdir('/Users/valeriajimeno/Downloads/Peiser_maps')
 
-estaciones = nx.read_shp('rutas-metro/estaciones-metro.shp').to_undirected()
-lineas = nx.read_shp('rutas-lineas-de-metro/lineas-de-metro.shp')
+# estaciones = nx.read_shp('rutas-metro/estaciones-metro.shp').to_undirected() # convertimos a grafica no dirigida
+# lineas = nx.read_shp('rutas-lineas-de-metro/lineas-de-metro.shp')
+# con = ast.literal_eval('lineas-de-metro.json')
+# estaciones_list = list(estaciones) # como es un conjunto de nodos lo convertimos a listas
 
-estaciones_list = list(estaciones)
+estaciones=nx.Graph()
+aristas = json.loads(lineas.jason)
 
-g = nx.compose(estaciones, lineas)
 
-for i in range(200):
-	n1 = estaciones_list[ran.randint(0,194)]
-	n2 = estaciones_list[ran.randint(0,194)]
-	if n1 != n2:
-		estaciones.add_edge(n1,n2)
+for key in aristas:
+	i = 0
+	ar = aristas[key]['coordinates']
+	while i < len(ar)-1:
+		x = (ar[i][0],ar[i][1])
+		y = (ar[i+1][0],ar[i+1][1])
+		estaciones.add_edge(x,y)
+		i+=1
 
-new_estaciones = list(nx.connected_components(estaciones))[0]
-new_estaciones_list = list(new_estaciones)
+estaciones_list= list(estaciones)
 
-l = len(new_estaciones_list)
+print(len(estaciones_list)) #hay 164 estaciones DISTINTAS
 
-n1 = new_estaciones_list[ran.randint(0,l-1)]
-n2 = new_estaciones_list[ran.randint(0,l-1)]
+n1 = estaciones_list[ran.randint(0,163)]   #origen    nodos aleatorios
+n2 = estaciones_list[ran.randint(0,163)]   #destino
+
+# n1 = (-99.142524, 19.3441988)
+# n2 = (-99.1878051, 19.3761645)
 
 path = nx.shortest_path(estaciones,n1,n2)
 djs_path = nx.dijkstra_path(estaciones,n1,n2)
@@ -46,9 +56,14 @@ print("from node " + str(n1))
 print("to node " + str(n2))
 print("the shortest path is: " + str(path))
 print("and using Dijkstra : " + str(djs_path))
+print(path == djs_path)
 
 
 nx.draw(estaciones)
 plt.savefig("graf")
 
-
+'''
+pesos:
+**** toma ya el número de nodos que tiene que recorrer
+distancia entre estaciones
+'''
