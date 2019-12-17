@@ -1,4 +1,3 @@
-jason = ''' 
 {
   "linea5" : {
     "coordinates": [
@@ -830,4 +829,3 @@ jason = '''
         ]
       }
 }
-'''

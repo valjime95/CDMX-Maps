@@ -15,6 +15,8 @@ import random as ran
 import ast 
 import json
 import lineas
+import folium
+
 
 #arcpy.Merge_management(["rutas-lineas-de-metro/lineas-de-metro.shp", "rutas-metro/estaciones-metro.shp"], "merge.shp")
 
@@ -27,9 +29,16 @@ import lineas
 # con = ast.literal_eval('lineas-de-metro.json')
 # estaciones_list = list(estaciones) # como es un conjunto de nodos lo convertimos a listas
 
-estaciones=nx.Graph()
-aristas = json.loads(lineas.jason)
+estaciones=nx.Graph()                      # Creamos una gráfica 
+aristas = json.loads(lineas.jason)         
+'''
+for key in aristas:
+	i = 0
+	ar = aristas[key]['coordinates']
+print(ar[1][0])
+'''
 
+#Conectamos las aristas con los nodos.
 
 for key in aristas:
 	i = 0
@@ -44,6 +53,7 @@ estaciones_list= list(estaciones)
 
 print(len(estaciones_list)) #hay 164 estaciones DISTINTAS
 
+
 n1 = estaciones_list[ran.randint(0,163)]   #origen    nodos aleatorios
 n2 = estaciones_list[ran.randint(0,163)]   #destino
 
@@ -52,18 +62,23 @@ n2 = estaciones_list[ran.randint(0,163)]   #destino
 
 path = nx.shortest_path(estaciones,n1,n2)
 djs_path = nx.dijkstra_path(estaciones,n1,n2)
-print("from node " + str(n1))
-print("to node " + str(n2))
+#print("from node " + str(n1))
+#print("to node " + str(n2))
 print("the shortest path is: " + str(path))
-print("and using Dijkstra : " + str(djs_path))
-print(path == djs_path)
+#print("and using Dijkstra : " + str(djs_path))
+#print(path == djs_path)
 
 
-nx.draw(estaciones)
-plt.savefig("graf")
+# DIBUJAR EN EL MAPA
 
-'''
-pesos:
-**** toma ya el número de nodos que tiene que recorrer
-distancia entre estaciones
-'''
+mapa = folium.Map(location=[19.4284700,-99.1276600])  # inicilizamos con las coordenadas de la ciudad de mexico
+for i in range(len(path)):
+    folium.CircleMarker([path[i][1], path[i][0]], icon=folium.Icon(color='red')).add_to(mapa)
+
+mapa.save(('plot_data.html'))
+
+#nx.draw(estaciones) # se dibuja la gráfica sin formato
+#plt.savefig("graf")
+
+
+
