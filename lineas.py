@@ -1,4 +1,4 @@
-jason = ''' 
+json = ''' 
 {
   "linea5" : {
     "coordinates": [
@@ -143,7 +143,7 @@ jason = '''
             -99.10888888888888,
             19.3369444 
           ],
-          ["San Andrés Tomatlán MAL",
+          ["San Andrés Tomatlán",
             -99.1050339189064,
             19.3276021253425
           ],
@@ -419,7 +419,7 @@ jason = '''
             -99.1863245,
             19.3847724
           ],
-          ["Sn. Pedro de los Pinos",
+          ["San Pedro de los Pinos",
             -99.1860509,
             19.3912798
           ],
